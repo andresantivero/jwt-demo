@@ -1,10 +1,13 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Mi Billetera</ion-title>
-  </ion-toolbar>
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+      <ion-title>
+        <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+        DolaritoApp - Menu
+      </ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="dollar-background">
 
   <ion-grid>
     <ion-row class="ion-justify-content-center ion-margin-top">
@@ -52,8 +55,18 @@
         </ion-button>
       </ion-col>
 
+      <ion-col size="12">
+        <ion-button expand="block" color="danger"  (click)="logout()" size="large">
+          <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+          Cerrar Sesión
+        </ion-button>
+      </ion-col>
+
     </ion-row>
 
   </ion-grid>
+
+   <!-- Fondo con patrón de dólares -->
+   <div class="dollar-pattern"></div> 
 
 </ion-content>
