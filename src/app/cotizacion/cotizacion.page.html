@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Cotización Dólar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list *ngIf="dolarData.length > 0; else cargando">
+    <ion-item *ngFor="let dolar of dolarData">
+      <ion-label>
+        <h2>{{ dolar.nombre }}</h2>
+        <p>Compra: ${{ dolar.compra }} | Venta: ${{ dolar.venta }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #cargando>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando cotizaciones...</p>
+  </ng-template>
+</ion-content>

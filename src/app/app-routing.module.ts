@@ -16,7 +16,12 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  },  
+  },   {
+    path: 'cotizacion',
+    loadChildren: () => import('./cotizacion/cotizacion.module').then( m => m.CotizacionPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+ 
   
 ];
 
