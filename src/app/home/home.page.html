@@ -1,18 +1,59 @@
 <ion-header>
-  <ion-toolbar>
-  <ion-title>Página Segura</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Billetera</ion-title>
   </ion-toolbar>
- </ion-header>
- <ion-content class="ion-padding">
-  <h1>Bienvenido a la página segura!</h1>
-  <p>Solo los usuarios autenticados pueden ver esta página.</p>
-  <ion-card *ngIf="token">
-  <ion-card-header>
-  <ion-card-title>Token JWT</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-  <pre>{{ token }}</pre>
-  </ion-card-content>
-  </ion-card>
-  <ion-button expand="full" (click)="logout()">Cerrar Sesión</ion-button>
- </ion-content>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-margin-top">
+
+      <ion-col size="12">
+        <ion-button expand="block" color="success" routerLink="/cotizacion" size="large">
+          <ion-icon name="cash-outline" slot="start"></ion-icon>
+          Cotización
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="secondary" routerLink="/saldo" size="large">
+          <ion-icon name="wallet-outline" slot="start"></ion-icon>
+          Saldo
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+
+      <ion-col size="12">
+        <ion-button expand="block" color="tertiary" routerLink="/compra" size="large">
+          <ion-icon name="cart-outline" slot="start"></ion-icon>
+          Comprar
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="warning" routerLink="/venta" size="large">
+          <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
+          Vender
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+
+      <ion-col size="12">
+        <ion-button expand="block" color="dark" routerLink="/historial" size="large">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
+          Historial
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

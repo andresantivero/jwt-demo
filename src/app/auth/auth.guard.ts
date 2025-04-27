@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
         if (!isAuthenticated) {
           const toast = await this.toastController.create({
             message: 'No estás logueado. Redirigiendo al login...',
-            duration: 1500, // 1.5 segundos
+            duration: 1000, // 1 segundo
             color: 'warning',
             position: 'middle',
 			
