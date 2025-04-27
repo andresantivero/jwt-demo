@@ -53,7 +53,7 @@ export class LoginPage implements OnInit {
 
 				if (res) {
 
-					this.router.navigateByUrl('/secure');
+					this.router.navigateByUrl('/home');
 
 				} else {
 
