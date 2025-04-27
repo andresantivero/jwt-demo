@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp - comprar
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="dollar-background">  
+
+  <ion-row class="ion-justify-content-center">
+
+    <ion-col size="12">
+      <ion-button expand="block" color="dark" routerLink="/home" size="large">
+        <ion-icon name="time-outline" slot="start"></ion-icon>
+        Volver al menu
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <!-- Fondo con patrón de dólares -->
+  <div class="dollar-pattern"></div>
+
+</ion-content>

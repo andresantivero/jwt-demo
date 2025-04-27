@@ -25,7 +25,12 @@ const routes: Routes = [
     path: 'saldo',
     loadChildren: () => import('./saldo/saldo.module').then( m => m.SaldoPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'comprar',
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
   }
+
 
   
 ];
