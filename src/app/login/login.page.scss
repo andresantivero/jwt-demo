@@ -1,0 +1,74 @@
+:host {
+    --dollar-green: #009b3a;
+    --dark-accent: #1a1a1a;
+  }
+
+  .dollar-background {
+    --background: linear-gradient(160deg, var(--dollar-green) 0%, #00612a 100%);
+    position: relative;
+  }
+
+  .dollar-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="80" font-family="Arial">$</text></svg>');
+    background-repeat: repeat;
+    z-index: 0;
+  }
+
+  .dollar-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    position: relative;
+  }
+
+  .dollar-title {
+    color: var(--dollar-green) !important;
+    font-weight: 900;
+    font-size: 2em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .dollar-subtitle {
+    color: var(--dark-accent) !important;
+    font-weight: 500;
+  }
+
+  .dollar-logo {
+    color: var(--dollar-green);
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  .login-btn {
+    --background: var(--dollar-green);
+    --background-hover: #008030;
+    --color: white;
+    --border-radius: 10px;
+    margin-top: 20px;
+  }
+
+  .center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    padding: 20px;
+  }
+
+  .auth-options {
+    width: 100%;
+    max-width: 400px;
+    transform: translateY(-20px);
+  }
+
+  .dollar-icon {
+    color: white;
+    margin-right: 10px;
+    vertical-align: middle;
+    font-size: 1.4em;
+  }
