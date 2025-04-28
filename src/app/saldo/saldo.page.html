@@ -2,26 +2,12 @@
   <ion-toolbar color="success">
     <ion-title>
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-      DolaritoApp - Cotización Dólar
+      DolaritoApp - Saldo
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="dollar-background">
-  <ion-list *ngIf="dolarData.length > 0; else cargando">
-    <ion-item *ngFor="let dolar of dolarData">
-      <ion-label>
-        <h2>{{ dolar.nombre }}</h2>
-        <p>Compra: ${{ dolar.compra }} | Venta: ${{ dolar.venta }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ng-template #cargando>
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando cotizaciones...</p>
-  </ng-template>
-
+<ion-content [fullscreen]="true" class="dollar-background">  
 
   <ion-row class="ion-justify-content-center">
 

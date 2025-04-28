@@ -20,7 +20,13 @@ const routes: Routes = [
     path: 'cotizacion',
     loadChildren: () => import('./cotizacion/cotizacion.module').then( m => m.CotizacionPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'saldo',
+    loadChildren: () => import('./saldo/saldo.module').then( m => m.SaldoPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
   }
+
   
 ];
 

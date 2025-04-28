@@ -34,10 +34,5 @@ export class CotizacionPage implements OnInit {
         console.error('Error cargando cotizaciones:', error);
       }
     });
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigateByUrl('/login');
-  }
+  } 
 }
