@@ -53,10 +53,14 @@ export class LoginPage implements OnInit {
 
 				if (res) {
 
+					this.credentials.username = ""
+					this.credentials.password = ""
 					this.router.navigateByUrl('/home');
 
 				} else {
 
+					this.credentials.username = ""
+					this.credentials.password = ""
 					this.errorMessage = 'Credenciales incorrectas.';
 
 				}
@@ -64,6 +68,8 @@ export class LoginPage implements OnInit {
 			}, error: (err) => {
 
 				this.loading?.dismiss();
+				this.credentials.username = ""
+				this.credentials.password = ""
 				this.errorMessage = 'Error al iniciar sesión.';
 				console.error(err);
 

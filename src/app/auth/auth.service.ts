@@ -72,7 +72,7 @@ export class AuthService {
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
 
@@ -104,21 +104,21 @@ export class AuthService {
   constructor() {
     this.checkToken();
   }
-
   login(credentials: { username: string; password: string }): Observable<UserCredential | null> {
-    return from(
-      signInWithEmailAndPassword(auth, credentials.username, credentials.password)
-    ).pipe(
-      map((userCredential) => {
-        userCredential.user.getIdToken().then(token => {
-          this.setToken(token);
-          this.isAuthenticatedSubject.next(true);
-        });
-        return userCredential;
+    return from(signInWithEmailAndPassword(auth, credentials.username, credentials.password)).pipe(
+      // Convertimos el token a un observable
+      switchMap((userCredential) => {
+        return from(userCredential.user.getIdToken()).pipe(
+          map((token) => {
+            this.setToken(token);
+            this.isAuthenticatedSubject.next(true); // 👈 ahora esto es sincrónico dentro del flujo
+            return userCredential;
+          })
+        );
       }),
       catchError(error => {
         console.error('Login error', error);
-        return of(null); // Fallo de autenticación
+        return of(null);
       })
     );
   }
