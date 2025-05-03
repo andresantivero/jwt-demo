@@ -51,10 +51,8 @@ export class LoginPage implements OnInit {
 
 				this.loading?.dismiss();
 
-				if (res) {
-
-					this.credentials.username = ""
-					this.credentials.password = ""
+				if (res) {				
+					
 					this.router.navigateByUrl('/home');
 
 				} else {
