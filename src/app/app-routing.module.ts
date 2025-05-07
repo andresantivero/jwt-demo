@@ -28,8 +28,15 @@ const routes: Routes = [
   },
   {
     path: 'comprar',
-    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'vender',
+    loadChildren: () => import('./vender/vender.module').then( m => m.VenderPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
   }
+
 
 
   

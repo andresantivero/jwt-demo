@@ -10,6 +10,7 @@
 <ion-content [fullscreen]="true" class="dollar-background">
 
   <ion-grid>
+  
     <ion-row class="ion-justify-content-center ion-margin-top">
 
       <ion-col size="12">
@@ -31,19 +32,19 @@
     <ion-row class="ion-justify-content-center">
 
       <ion-col size="12">
-        <ion-button expand="block" color="tertiary" routerLink="/comprar" size="large">
+        <ion-button expand="block" color="tertiary" size="large" (click)="autenticarHuella('/comprar')">
           <ion-icon name="cart-outline" slot="start"></ion-icon>
           Comprar
         </ion-button>
       </ion-col>
-
+      
       <ion-col size="12">
-        <ion-button expand="block" color="warning" routerLink="/venta" size="large">
+        <ion-button expand="block" color="warning" size="large" (click)="autenticarHuella('/vender')">
           <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
           Vender
         </ion-button>
       </ion-col>
-
+      
     </ion-row>
 
     <ion-row class="ion-justify-content-center">

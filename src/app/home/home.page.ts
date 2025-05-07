@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
+import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +11,28 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
     token: string | null = null;
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private authService: AuthService, private router: Router, private faio: FingerprintAIO) {}
     ngOnInit() {
     this.token = this.authService.getToken();
     }
     logout() {
     this.authService.logout();
     this.router.navigateByUrl('/login');
+    }
+
+    autenticarHuella(path: string) {
+      this.faio
+        .show({
+          title: 'Autenticación requerida',
+          subtitle: 'Escanea tu huella digital',
+          description: 'Para continuar, verifica tu identidad',
+          disableBackup: true,
+        })
+        .then(() => {
+          this.router.navigate([path]);
+        })
+        .catch((error) => {
+          console.log('Autenticación cancelada o fallida', error);
+        });
     }
    }
