@@ -19,20 +19,85 @@
         </ion-card-header>
   
         <ion-card-content>
-          <ion-item>
-            <ion-label position="floating">Email</ion-label>
-            <ion-input type="text" [(ngModel)]="credentials.username"></ion-input>
-          </ion-item>
-  
-          <ion-item>
-            <ion-label position="floating">Contraseña</ion-label>
-            <ion-input type="password" [(ngModel)]="credentials.password"></ion-input>
-          </ion-item>
-  
-          <ion-button expand="block" class="login-btn" (click)="login()" [disabled]="!credentials.username || !credentials.password">
-            <ion-icon slot="start" name="log-in-outline"></ion-icon>
-            Iniciar Sesión
-          </ion-button>
+          <!-- Login Form -->
+          <div *ngIf="currentView === 'login'">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="text" [(ngModel)]="credentials.username"></ion-input>
+            </ion-item>
+    
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input type="password" [(ngModel)]="credentials.password"></ion-input>
+            </ion-item>
+    
+            <ion-button expand="block" class="login-btn" (click)="login()" [disabled]="!credentials.username || !credentials.password">
+              <ion-icon slot="start" name="log-in-outline"></ion-icon>
+              Iniciar Sesión
+            </ion-button>
+
+            <div class="auth-options-container">
+              <ion-button fill="clear" size="small" (click)="currentView = 'register'">
+                <ion-icon slot="start" name="person-add-outline"></ion-icon>
+                Registrarse
+              </ion-button>
+              <ion-button fill="clear" size="small" (click)="currentView = 'forgot'">
+                <ion-icon slot="start" name="key-outline"></ion-icon>
+                Olvidé mi contraseña
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Registration Form -->
+          <div *ngIf="currentView === 'register'">
+            <ion-item>
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input type="text" [(ngModel)]="registerData.name"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" [(ngModel)]="registerData.email"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input type="password" [(ngModel)]="registerData.password"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Confirmar Contraseña</ion-label>
+              <ion-input type="password" [(ngModel)]="registerData.confirmPassword"></ion-input>
+            </ion-item>
+
+            <ion-button expand="block" class="register-btn" (click)="register()" [disabled]="!registerData.email || !registerData.password || !registerData.name || !registerData.confirmPassword">
+              <ion-icon slot="start" name="person-add-outline"></ion-icon>
+              Registrarse
+            </ion-button>
+
+            <ion-button fill="clear" size="small" expand="block" (click)="currentView = 'login'">
+              <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+              Volver al login
+            </ion-button>
+          </div>
+
+          <!-- Forgot Password Form -->
+          <div *ngIf="currentView === 'forgot'">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" [(ngModel)]="forgotData.email"></ion-input>
+            </ion-item>
+
+            <ion-button expand="block" class="forgot-btn" (click)="resetPassword()" [disabled]="!forgotData.email">
+              <ion-icon slot="start" name="mail-outline"></ion-icon>
+              Enviar correo de recuperación
+            </ion-button>
+
+            <ion-button fill="clear" size="small" expand="block" (click)="currentView = 'login'">
+              <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+              Volver al login
+            </ion-button>
+          </div>
   
           <ion-text color="danger" *ngIf="errorMessage">
             <p>{{ errorMessage }}</p>

@@ -2,7 +2,16 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  UserCredential,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendPasswordResetEmail
+} from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -19,6 +28,7 @@ const firebaseConfig = {
 // Inicializamos Firebase solo una vez
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
 @Injectable({
   providedIn: 'root',
@@ -75,5 +85,59 @@ export class AuthService {
   private checkToken(): void {
     const token = this.getToken();
     this.isAuthenticatedSubject.next(!!token);
+  }
+
+  getCurrentUser() {
+    return auth.currentUser;
+  }
+
+  async getUserData() {
+    const user = this.getCurrentUser();
+    if (!user) return null;
+
+    const userDocRef = doc(db, 'usuarios', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    
+    if (userDoc.exists()) {
+      return userDoc.data();
+    }
+    return null;
+  }
+
+  register(userData: { name: string; email: string; password: string }): Observable<UserCredential> {
+    return from(createUserWithEmailAndPassword(auth, userData.email, userData.password)).pipe(
+      switchMap((userCredential) => {
+        // Actualizar el nombre del usuario
+        return from(updateProfile(userCredential.user, {
+          displayName: userData.name
+        })).pipe(
+          switchMap(() => {
+            // Crear documento del usuario en Firestore
+            const userDocRef = doc(db, 'usuarios', userCredential.user.uid);
+            return from(setDoc(userDocRef, {
+              user_name: userData.name,
+              user_mail: userData.email,
+              user_pass: userData.password, // Nota: normalmente no se almacena la contraseña en texto plano
+              user_pesos: 0,
+              user_dolares: 0
+            }));
+          }),
+          map(() => userCredential)
+        );
+      }),
+      catchError(error => {
+        console.error('Registration error', error);
+        throw error;
+      })
+    );
+  }
+
+  resetPassword(email: string): Observable<void> {
+    return from(sendPasswordResetEmail(auth, email)).pipe(
+      catchError(error => {
+        console.error('Password reset error', error);
+        throw error;
+      })
+    );
   }
 }

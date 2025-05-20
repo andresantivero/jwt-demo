@@ -22,12 +22,40 @@ export class SaldoPage implements OnInit {
   // y las demas funciones que tenga la paginola
 
   token: string | null = null;
+  userData: any = null;
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {
-
+  async ngOnInit() {
     this.token = this.authService.getToken();
+    if (!this.token) {
+      this.router.navigateByUrl('/login');
+      return;
+    }
 
+    try {
+      this.userData = await this.authService.getUserData();
+      if (!this.userData) {
+        console.error('No se encontraron datos del usuario');
+      }
+    } catch (error) {
+      console.error('Error al obtener datos del usuario:', error);
+    }
+  }
+
+  ionViewWillEnter() {
+    // Actualizar los datos cada vez que se entre a la página
+    this.loadUserData();
+  }
+
+  private async loadUserData() {
+    try {
+      this.userData = await this.authService.getUserData();
+      if (!this.userData) {
+        console.error('No se encontraron datos del usuario');
+      }
+    } catch (error) {
+      console.error('Error al obtener datos del usuario:', error);
+    }
   }
 }
