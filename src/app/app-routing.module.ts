@@ -16,7 +16,8 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  },   {
+  },   
+  {
     path: 'cotizacion',
     loadChildren: () => import('./cotizacion/cotizacion.module').then( m => m.CotizacionPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
@@ -28,10 +29,14 @@ const routes: Routes = [
   },
   {
     path: 'comprar',
-    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'historial',
+    loadChildren: () => import('./historial/historial.module').then( m => m.HistorialPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
   }
-
-
   
 ];
 

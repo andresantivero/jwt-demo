@@ -11,7 +11,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -97,12 +97,30 @@ export class AuthService {
 
     const userDocRef = doc(db, 'usuarios', user.uid);
     const userDoc = await getDoc(userDocRef);
-    
+
     if (userDoc.exists()) {
       return userDoc.data();
     }
     return null;
   }
+
+  async getUserTransactions() {
+    const user = this.getCurrentUser();
+    if (!user) return [];
+
+    const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+    const transaccionesSnap = await getDocs(transaccionesRef);
+
+    const transacciones = transaccionesSnap.docs.map(doc => {
+      return {
+        id: doc.id,
+        ...doc.data()
+      };
+    });
+
+    return transacciones;
+  }
+
 
   register(userData: { name: string; email: string; password: string }): Observable<UserCredential> {
     return from(createUserWithEmailAndPassword(auth, userData.email, userData.password)).pipe(
