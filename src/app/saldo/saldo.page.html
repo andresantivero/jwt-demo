@@ -11,10 +11,17 @@
   <div class="ion-padding">
     <ion-card class="balance-card">
       <ion-card-header>
-        <ion-card-title class="ion-text-center">
-          <ion-icon name="person-circle-outline" class="user-icon"></ion-icon>
-          Bienvenido, {{ userData?.user_name }}
-        </ion-card-title>
+        <div class="profile-header">
+          <div class="profile-image-container" *ngIf="userData?.profileImage">
+            <img [src]="userData.profileImage" alt="Foto de perfil" class="profile-image">
+          </div>
+          <div class="profile-image-container" *ngIf="!userData?.profileImage">
+            <ion-icon name="person-circle-outline" class="default-profile-icon"></ion-icon>
+          </div>
+          <ion-card-title class="ion-text-center">
+            Bienvenido, {{ userData?.user_name }}
+          </ion-card-title>
+        </div>
       </ion-card-header>
 
       <ion-card-content>

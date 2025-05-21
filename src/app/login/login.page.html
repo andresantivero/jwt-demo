@@ -70,7 +70,25 @@
               <ion-input type="password" [(ngModel)]="registerData.confirmPassword"></ion-input>
             </ion-item>
 
-            <ion-button expand="block" class="register-btn" (click)="register()" [disabled]="!registerData.email || !registerData.password || !registerData.name || !registerData.confirmPassword">
+            <!-- Sección de imagen de perfil -->
+            <div class="profile-image-section">
+              <ion-label>Foto de perfil</ion-label>
+              <div class="image-preview" *ngIf="registerData.profileImage">
+                <img [src]="registerData.profileImage" alt="Vista previa de la imagen">
+              </div>
+              <div class="camera-buttons">
+                <ion-button expand="block" fill="outline" (click)="takePicture()">
+                  <ion-icon slot="start" name="camera"></ion-icon>
+                  Tomar Foto
+                </ion-button>
+                <ion-button expand="block" fill="outline" (click)="selectFromGallery()">
+                  <ion-icon slot="start" name="images"></ion-icon>
+                  Elegir de Galería
+                </ion-button>
+              </div>
+            </div>
+
+            <ion-button expand="block" class="register-btn" (click)="register()" [disabled]="!registerData.email || !registerData.password || !registerData.name || !registerData.confirmPassword || !registerData.profileImage">
               <ion-icon slot="start" name="person-add-outline"></ion-icon>
               Registrarse
             </ion-button>

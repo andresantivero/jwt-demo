@@ -104,7 +104,7 @@ export class AuthService {
     return null;
   }
 
-  register(userData: { name: string; email: string; password: string }): Observable<UserCredential> {
+  register(userData: { name: string; email: string; password: string; profileImage?: string }): Observable<UserCredential> {
     return from(createUserWithEmailAndPassword(auth, userData.email, userData.password)).pipe(
       switchMap((userCredential) => {
         // Actualizar el nombre del usuario
@@ -114,13 +114,20 @@ export class AuthService {
           switchMap(() => {
             // Crear documento del usuario en Firestore
             const userDocRef = doc(db, 'usuarios', userCredential.user.uid);
-            return from(setDoc(userDocRef, {
+            const userDataToSave: any = {
               user_name: userData.name,
               user_mail: userData.email,
               user_pass: userData.password, // Nota: normalmente no se almacena la contraseña en texto plano
               user_pesos: 0,
               user_dolares: 0
-            }));
+            };
+            
+            // Solo agregar la imagen de perfil si existe
+            if (userData.profileImage) {
+              userDataToSave.profileImage = userData.profileImage;
+            }
+            
+            return from(setDoc(userDocRef, userDataToSave));
           }),
           map(() => userCredential)
         );
