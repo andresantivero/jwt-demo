@@ -11,7 +11,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -119,6 +119,22 @@ export class AuthService {
     });
 
     return transacciones;
+  }
+
+  getUserTransactionsRealtime(callback: (transacciones: any[]) => void) {
+    const user = this.getCurrentUser();
+    if (!user) return;
+  
+    const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+  
+    // Esto escucha en tiempo real
+    return onSnapshot(transaccionesRef, (snapshot) => {
+      const transacciones = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      callback(transacciones);
+    });
   }
 
 

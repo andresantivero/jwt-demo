@@ -6,7 +6,6 @@
 .dollar-background {
   --background: linear-gradient(160deg, var(--dollar-green) 0%, #00612a 100%);
   position: relative;
-  min-height: 100%;
 }
 
 .dollar-pattern {
@@ -19,52 +18,5 @@
 }
 
 .balance-card {
-  margin: 16px;
-  border-radius: 10px;
-  background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 1;
-
-  ion-card-header {
-    background: var(--ion-color-success);
-    color: white;
-    border-radius: 10px 10px 0 0;
-    padding: 16px;
-
-    ion-card-title {
-      font-size: 1.5em;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
-
-  ion-list {
-    background: transparent;
-    padding: 16px 0;
-  }
-
-  ion-item {
-    --background: transparent;
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --padding-top: 12px;
-    --padding-bottom: 12px;
-    margin: 8px 0;
-
-    ion-label {
-      h2 {
-        font-size: 1em;
-        color: var(--ion-color-medium);
-        margin-bottom: 4px;
-      }
-
-      .balance-amount {
-        font-size: 1.8em;
-        font-weight: bold;
-        color: var(--ion-color-dark);
-        margin: 0;
-      }
-    }
-  }
+  margin: 10px;
 }

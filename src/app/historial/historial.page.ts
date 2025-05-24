@@ -13,8 +13,11 @@ export class HistorialPage implements OnInit {
 
   constructor(private authService: AuthService) {}
 
-  async ngOnInit() {
-    this.transacciones = await this.authService.getUserTransactions();
+  ngOnInit() {
+    this.authService.getUserTransactionsRealtime((transacciones) => {
+      this.transacciones = transacciones;
+      console.log('Transacciones actualizadas:', this.transacciones);
+    });
   }
 
   getTipoNombre(tipo: number): string {
