@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp - Ingresar Dinero
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="dollar-background">
+  <div class="dollar-pattern"></div>
+
+  <ion-row class="ion-padding ion-justify-content-center">
+    <ion-col size="12">
+      <ion-item>
+        <ion-label position="stacked">Tipo de ingreso</ion-label>
+        <ion-select [(ngModel)]="tipoSeleccionado" interface="popover">
+          <ion-select-option [value]="1">Ingresar Pesos</ion-select-option>
+          <ion-select-option [value]="3">Ingresar Dólares</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="12">
+      <ion-item>
+        <ion-label position="stacked">Monto</ion-label>
+        <ion-input type="number" [(ngModel)]="monto" placeholder="Ingrese el monto"></ion-input>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="12">
+      <ion-button expand="block" color="light" (click)="depositarDinero()">
+        Depositar
+      </ion-button>
+    </ion-col>
+
+    <ion-col size="12">
+      <ion-button expand="block" color="dark" routerLink="/home" size="large">
+        <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
+        Volver al menú
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

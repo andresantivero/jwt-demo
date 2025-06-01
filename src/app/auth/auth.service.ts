@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { initializeApp } from 'firebase/app';
 import {
@@ -11,7 +11,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot,addDoc } from 'firebase/firestore';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -104,29 +104,12 @@ export class AuthService {
     return null;
   }
 
-  async getUserTransactions() {
-    const user = this.getCurrentUser();
-    if (!user) return [];
-
-    const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
-    const transaccionesSnap = await getDocs(transaccionesRef);
-
-    const transacciones = transaccionesSnap.docs.map(doc => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      };
-    });
-
-    return transacciones;
-  }
-
   getUserTransactionsRealtime(callback: (transacciones: any[]) => void) {
     const user = this.getCurrentUser();
     if (!user) return;
-  
+
     const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
-  
+
     // Esto escucha en tiempo real
     return onSnapshot(transaccionesRef, (snapshot) => {
       const transacciones = snapshot.docs.map(doc => ({
@@ -174,4 +157,61 @@ export class AuthService {
       })
     );
   }
+
+ 
+
+depositar(monto: number, tipo: number): Observable<void> {
+  const user = this.getCurrentUser();
+  if (!user) return throwError(() => new Error('Usuario no autenticado'));
+
+  const userDocRef = doc(db, 'usuarios', user.uid);
+  const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+
+  return from(getDoc(userDocRef)).pipe(
+    switchMap((docSnap) => {
+      if (!docSnap.exists()) throw new Error('Usuario no encontrado');
+      const userData = docSnap.data();
+
+      console.log("Datos actuales del usuario:", userData);
+
+      let nuevosPesos = userData['user_pesos'] || 0;
+      let nuevosDolares = userData['user_dolares'] || 0;
+
+      if (tipo === 1) {
+        nuevosPesos += monto;
+      } else if (tipo === 3) {
+        nuevosDolares += monto;
+      } else {
+        throw new Error('Tipo de transacción inválido');
+      }
+
+      console.log("Nuevos valores -> Pesos:", nuevosPesos, "Dólares:", nuevosDolares);
+
+      return from(setDoc(userDocRef, {
+        ...userData,
+        user_pesos: nuevosPesos,
+        user_dolares: nuevosDolares
+      })).pipe(
+        switchMap(() => {
+          const transaccion = {
+            transacciones_dolar: tipo === 3 ? monto : 0,
+            transacciones_peso: tipo === 1 ? monto : 0,
+            transacciones_tipo: tipo,
+            transacciones_fecha: new Date().toISOString()
+          };
+          console.log("Transacción a registrar:", transaccion);
+          return from(addDoc(transaccionesRef, transaccion));
+        })
+      );
+    }),
+    map(() => { }),
+    catchError(error => {
+      console.error('🔥 ERROR DETECTADO 🔥', error);
+      return throwError(() => new Error('Ocurrió un error al procesar el depósito.'));
+    })
+  );
+}
+
+
+
 }

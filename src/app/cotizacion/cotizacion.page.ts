@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { Router } from '@angular/router';
 import { DolarService } from '../auth/dolar.service'; // Ajustá ruta si es necesario
 
 @Component({
@@ -16,7 +15,6 @@ export class CotizacionPage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
     private dolarService: DolarService
   ) { }
 

@@ -36,6 +36,11 @@ const routes: Routes = [
     path: 'historial',
     loadChildren: () => import('./historial/historial.module').then( m => m.HistorialPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'ingresar',
+    loadChildren: () => import('./ingresar/ingresar.module').then( m => m.IngresarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
   }
   
 ];
