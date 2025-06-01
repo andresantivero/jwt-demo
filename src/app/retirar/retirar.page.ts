@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
-
 @Component({
-  selector: 'app-comprar',
-  templateUrl: './comprar.page.html',
-  styleUrls: ['./comprar.page.scss'],
+  selector: 'app-retirar',
+  templateUrl: './retirar.page.html',
+  styleUrls: ['./retirar.page.scss'],
   standalone: false
 })
-export class ComprarPage implements OnInit {
+export class RetirarPage implements OnInit {
 
-  token: string | null = null;
+   token: string | null = null;
 
   constructor(private authService: AuthService) { }
 

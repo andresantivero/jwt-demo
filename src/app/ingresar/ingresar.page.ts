@@ -13,6 +13,7 @@ export class IngresarPage implements OnInit {
   token: string | null = null;
   tipoSeleccionado: number = 1;
   monto: number = 0;
+  esperandoConfirmacion: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -24,30 +25,64 @@ export class IngresarPage implements OnInit {
     this.token = this.authService.getToken();
   }
 
-  async depositarDinero() {
+  async prepararDeposito() {
     if (!this.monto || this.monto <= 0) {
-      this.mostrarAlerta('Monto inválido', 'Ingrese un monto mayor a 0.');
+      this.mostrarAlerta('⚠️ Monto inválido', 'Ingrese un monto mayor a 0.');
       return;
     }
 
+    const transaccion = {
+      tipo: this.tipoSeleccionado,
+      monto: this.monto,
+      fecha: new Date().toISOString()
+    };
+
+    localStorage.setItem('transaccionPendiente', JSON.stringify(transaccion));
+    this.esperandoConfirmacion = true;
+    this.mostrarAlerta('🕒 Esperando Confirmación', 'Cuando hayas realizado la transferencia, confirmá el depósito.');
+  }
+
+  async confirmarDeposito() {
+    const transaccionGuardada = localStorage.getItem('transaccionPendiente');
+
+    if (!transaccionGuardada) {
+      this.mostrarAlerta('❌ Error', 'No hay transacción pendiente para confirmar.');
+      return;
+    }
+
+    const transaccion = JSON.parse(transaccionGuardada);
     const loading = await this.loadingCtrl.create({
-      message: 'Procesando depósito...',
-      spinner: 'circles',
-      duration: 5000
+      message: 'Confirmando depósito...',
+      spinner: 'dots'
     });
+     
     await loading.present();
 
-    this.authService.depositar(this.monto, this.tipoSeleccionado).subscribe({
+    this.authService.depositar(transaccion.monto, transaccion.tipo).subscribe({
       next: async () => {
+        
         await loading.dismiss();
-        this.mostrarAlerta('Éxito', `Se depositaron ${this.monto} ${this.tipoSeleccionado === 1 ? 'pesos' : 'dólares'} correctamente.`);
-        this.monto = 0;
+        localStorage.removeItem('transaccionPendiente');
+        this.mostrarAlerta('✅ Éxito', `Se depositaron ${transaccion.monto} ${transaccion.tipo === 1 ? 'pesos' : 'dólares'} correctamente.`);
+        this.resetFormulario();
       },
-      error: async (err) => {
+      error: async () => {
         await loading.dismiss();
-        this.mostrarAlerta('Error', 'Ocurrió un error al procesar el depósito.');
+        this.mostrarAlerta('❌ Error', 'Ocurrió un problema al confirmar el depósito.');
       }
     });
+  }
+
+  cancelarDeposito() {
+    localStorage.removeItem('transaccionPendiente');
+    this.mostrarAlerta('🚫 Cancelado', 'La operación fue cancelada.');
+    this.resetFormulario();
+  }
+
+  resetFormulario() {
+    this.monto = 0;
+    this.tipoSeleccionado = 1;
+    this.esperandoConfirmacion = false;
   }
 
   async mostrarAlerta(titulo: string, mensaje: string) {

@@ -41,7 +41,13 @@ const routes: Routes = [
     path: 'ingresar',
     loadChildren: () => import('./ingresar/ingresar.module').then( m => m.IngresarPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'retirar',
+    loadChildren: () => import('./retirar/retirar.module').then( m => m.RetirarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
   }
+
   
 ];
 
