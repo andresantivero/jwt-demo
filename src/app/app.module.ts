@@ -20,4 +20,3 @@ import { HttpClientModule } from '@angular/common/http';
   bootstrap: [AppComponent] // 👈 correcto
 })
 export class AppModule {}
-x|

@@ -10,14 +10,46 @@ import { TipoTransaccionNombre } from '../auth/transactions.service';
 })
 export class HistorialPage implements OnInit {
   transacciones: any[] = [];
+  transaccionesPaginadas: any[] = [];
+
+  pageSize: number = 5;
+  currentPage: number = 1;
+  totalPages: number = 1;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.authService.getUserTransactionsRealtime((transacciones) => {
-      this.transacciones = transacciones;
-      console.log('Transacciones actualizadas:', this.transacciones);
+      this.transacciones = transacciones
+        .sort((a, b) => {
+          const fechaA = a.transaccion_fecha.toDate();
+          const fechaB = b.transaccion_fecha.toDate();
+          return fechaB.getTime() - fechaA.getTime();
+        });
+
+      this.totalPages = Math.ceil(this.transacciones.length / this.pageSize);
+      this.actualizarPagina();
     });
+  }
+
+  actualizarPagina() {
+    const inicio = (this.currentPage - 1) * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.transaccionesPaginadas = this.transacciones.slice(inicio, fin);
+  }
+
+  siguientePagina() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.actualizarPagina();
+    }
+  }
+
+  anteriorPagina() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.actualizarPagina();
+    }
   }
 
   getTipoNombre(tipo: number): string {
