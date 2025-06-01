@@ -2,7 +2,7 @@
   <ion-toolbar color="success">
     <ion-title>
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-      DolaritoApp - Comprar Dólares
+      DolaritoApp - Vender Dólares
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,32 +14,32 @@
 
       <ion-card *ngIf="!loading; else cargando">
         <ion-card-header>
-          <ion-card-title>Precio dólar más barato</ion-card-title>
+          <ion-card-title>Precio dólar más caro</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <h2>{{ precioCompra | currency:'ARS':'symbol':'1.2-2' }}</h2>
-          <p>Saldo disponible en pesos: {{ userPesos | currency:'ARS' }}</p>
+          <h2>{{ precioVenta | currency:'ARS':'symbol':'1.2-2' }}</h2>
+          <p>Saldo disponible en dólares: {{ userDolares }}</p>
 
           <ion-item>
-            <ion-label position="floating">Cantidad de dólares a comprar</ion-label>
+            <ion-label position="floating">Cantidad de dólares a vender</ion-label>
             <ion-input
               type="number"
-              [(ngModel)]="dolaresAComprar"
-              (ionChange)="validarCompra()"
+              [(ngModel)]="dolaresAVender"
+              (ionChange)="validarVenta()"
               min="0"
               [max]="maxDolares"
               step="0.01"
             ></ion-input>
           </ion-item>
 
-          <p>Dólares máximos que puedes comprar: {{ maxDolares }}</p>
-          
+          <p>Dólares máximos que puedes vender: {{ maxDolares }}</p>
+
           <ion-text color="danger" *ngIf="errorMessage">{{ errorMessage }}</ion-text>
         </ion-card-content>
       </ion-card>
 
-      <ion-button expand="block" color="dark" (click)="comprar()" [disabled]="botonDisabled">
-        Comprar dólares
+      <ion-button expand="block" color="dark" (click)="vender()" [disabled]="botonDisabled">
+        Vender dólares
       </ion-button>
 
     </ion-col>

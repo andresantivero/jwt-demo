@@ -4,18 +4,18 @@ import { DolarService } from '../auth/dolar.service';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
-  selector: 'app-comprar',
-  templateUrl: './comprar.page.html',
-  styleUrls: ['./comprar.page.scss'],
+  selector: 'app-vender',
+  templateUrl: './vender.page.html',
+  styleUrls: ['./vender.page.scss'],
   standalone: false
 })
-export class ComprarPage implements OnInit {
+export class VenderPage implements OnInit {
 
   dolarData: any[] = [];
-  precioCompra: number = 0;
-  userPesos: number = 0;
+  precioVenta: number = 0;
+  userDolares: number = 0;
 
-  dolaresAComprar: number = 0;
+  dolaresAVender: number = 0;
   maxDolares: number = 0;
 
   loading = true;
@@ -40,14 +40,14 @@ export class ComprarPage implements OnInit {
   async cargarPerfil() {
     try {
       const data = await this.authService.getUserData();
-      this.userPesos = data?.['user_pesos'] ?? 0;
-      if (this.precioCompra > 0) {
-        this.maxDolares = +(this.userPesos / this.precioCompra).toFixed(2);
-        this.validarCompra();
+      this.userDolares = data?.['user_dolares'] ?? 0;
+      if (this.precioVenta > 0) {
+        this.maxDolares = this.userDolares;
+        this.validarVenta();
       }
     } catch (error) {
       console.error('Error cargando perfil', error);
-      this.userPesos = 0;
+      this.userDolares = 0;
     }
   }
 
@@ -55,7 +55,7 @@ export class ComprarPage implements OnInit {
     this.dolarService.llamarApiDolar().subscribe({
       next: (data) => {
         this.dolarData = data || [];
-        this.seleccionarPrecioMasBarato();
+        this.seleccionarPrecioMasCaro();
         this.loading = false;
       },
       error: (error) => {
@@ -66,25 +66,25 @@ export class ComprarPage implements OnInit {
     });
   }
 
-  seleccionarPrecioMasBarato() {
+  seleccionarPrecioMasCaro() {
     const cotizacionesValidas = this.dolarData.filter(d => !d.nombre.toLowerCase().includes('tarjeta'));
     if (!cotizacionesValidas.length) {
       this.errorMessage = 'No se encontraron cotizaciones válidas.';
       return;
     }
-    this.precioCompra = Math.min(...cotizacionesValidas.map(c => c.compra));
-    this.maxDolares = +(this.userPesos / this.precioCompra).toFixed(2);
-    this.validarCompra();
+    this.precioVenta = Math.max(...cotizacionesValidas.map(c => c.venta));
+    this.maxDolares = this.userDolares;
+    this.validarVenta();
   }
 
-  validarCompra() {
-    if (this.dolaresAComprar <= 0) {
+  validarVenta() {
+    if (this.dolaresAVender <= 0) {
       this.errorMessage = 'Ingrese una cantidad mayor que cero.';
       this.botonDisabled = true;
       return;
     }
-    if (this.dolaresAComprar > this.maxDolares) {
-      this.errorMessage = `No tienes saldo suficiente. Máximo permitido: ${this.maxDolares} dólares.`;
+    if (this.dolaresAVender > this.maxDolares) {
+      this.errorMessage = `No tienes suficientes dólares. Máximo permitido: ${this.maxDolares} dólares.`;
       this.botonDisabled = true;
       return;
     }
@@ -92,30 +92,28 @@ export class ComprarPage implements OnInit {
     this.botonDisabled = false;
   }
 
-  comprar() {
+  vender() {
     if (this.botonDisabled) return;
 
-    const montoPesos = +(this.dolaresAComprar * this.precioCompra).toFixed(2);
-
-    this.authService.comprarDolares(montoPesos, this.precioCompra).subscribe({
+    this.authService.venderDolares(this.dolaresAVender, this.precioVenta).subscribe({
       next: async () => {
-        await this.mostrarConfirmacionCompra(this.dolaresAComprar, this.precioCompra);
-        this.userPesos -= montoPesos;
-        this.maxDolares = +(this.userPesos / this.precioCompra).toFixed(2);
-        this.dolaresAComprar = 0;
+        await this.mostrarConfirmacionVenta(this.dolaresAVender, this.precioVenta);
+        this.userDolares -= this.dolaresAVender;
+        this.maxDolares = this.userDolares;
+        this.dolaresAVender = 0;
         this.botonDisabled = true;
       },
       error: async (e) => {
-        console.error('Error en la compra', e);
-        await this.mostrarError('Error procesando la compra');
+        console.error('Error en la venta', e);
+        await this.mostrarError('Error procesando la venta');
       }
     });
   }
 
-  async mostrarConfirmacionCompra(cantidadDolares: number, precio: number) {
+  async mostrarConfirmacionVenta(cantidadDolares: number, precio: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Compra exitosa',
-      message: `Compraste ${cantidadDolares} dólares a $${precio} por dólar.`,
+      header: 'Venta exitosa',
+      message: `Vendiste ${cantidadDolares} dólares a $${precio} por dólar.`,
       buttons: ['Aceptar']
     });
     await alert.present();

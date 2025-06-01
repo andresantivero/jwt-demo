@@ -46,7 +46,13 @@ const routes: Routes = [
     path: 'retirar',
     loadChildren: () => import('./retirar/retirar.module').then( m => m.RetirarPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'vender',
+    loadChildren: () => import('./vender/vender.module').then( m => m.VenderPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard y con su señora.
   }
+
 
   
 ];

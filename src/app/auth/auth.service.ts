@@ -214,4 +214,99 @@ depositar(monto: number, tipo: number): Observable<void> {
 
 
 
+  comprarDolares(montoPesos: number, precioDolar: number): Observable<void> {
+  const dolaresAComprar = +(montoPesos / precioDolar).toFixed(2);
+
+  if (montoPesos <= 0 || dolaresAComprar <= 0) {
+    return throwError(() => new Error('Monto o dólares inválidos para comprar'));
+  }
+
+  const user = this.getCurrentUser();
+  if (!user) return throwError(() => new Error('Usuario no autenticado'));
+
+  const userDocRef = doc(db, 'usuarios', user.uid);
+  const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+
+  return from(getDoc(userDocRef)).pipe(
+    switchMap((docSnap) => {
+      if (!docSnap.exists()) throw new Error('Usuario no encontrado');
+      const userData = docSnap.data();
+
+      const nuevosPesos = (userData['user_pesos'] || 0) - montoPesos;
+      const nuevosDolares = (userData['user_dolares'] || 0) + dolaresAComprar;
+
+      if (nuevosPesos < 0) throw new Error('Saldo en pesos insuficiente');
+
+      return from(setDoc(userDocRef, {
+        ...userData,
+        user_pesos: nuevosPesos,
+        user_dolares: nuevosDolares
+      })).pipe(
+        switchMap(() => {
+          const transaccion = {
+            transaccion_dolar: dolaresAComprar,
+            transaccion_peso: montoPesos,
+            transaccion_tipo: 5,  // Tipo 5 para compra dólares
+            transaccion_fecha: new Date()
+          };
+          return from(addDoc(transaccionesRef, transaccion));
+        })
+      );
+    }),
+    map(() => { }),
+    catchError(error => {
+      console.error('🔥 ERROR COMPRA 🔥', error);
+      return throwError(() => new Error('Ocurrió un error al procesar la compra de dólares.'));
+    })
+  );
+}
+
+venderDolares(montoDolares: number, precioDolar: number): Observable<void> {
+  const montoPesos = +(montoDolares * precioDolar).toFixed(2);
+
+  if (montoDolares <= 0 || montoPesos <= 0) {
+    return throwError(() => new Error('Monto inválido para vender'));
+  }
+
+  const user = this.getCurrentUser();
+  if (!user) return throwError(() => new Error('Usuario no autenticado'));
+
+  const userDocRef = doc(db, 'usuarios', user.uid);
+  const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+
+  return from(getDoc(userDocRef)).pipe(
+    switchMap((docSnap) => {
+      if (!docSnap.exists()) throw new Error('Usuario no encontrado');
+      const userData = docSnap.data();
+
+      const nuevosDolares = (userData['user_dolares'] || 0) - montoDolares;
+      const nuevosPesos = (userData['user_pesos'] || 0) + montoPesos;
+
+      if (nuevosDolares < 0) throw new Error('Saldo en dólares insuficiente');
+
+      return from(setDoc(userDocRef, {
+        ...userData,
+        user_pesos: nuevosPesos,
+        user_dolares: nuevosDolares
+      })).pipe(
+        switchMap(() => {
+          const transaccion = {
+            transaccion_dolar: montoDolares,
+            transaccion_peso: montoPesos,
+            transaccion_tipo: 6,  // Tipo 6 para venta dólares
+            transaccion_fecha: new Date()
+          };
+          return from(addDoc(transaccionesRef, transaccion));
+        })
+      );
+    }),
+    map(() => { }),
+    catchError(error => {
+      console.error('🔥 ERROR VENTA 🔥', error);
+      return throwError(() => new Error('Ocurrió un error al procesar la venta de dólares.'));
+    })
+  );
+}
+
+
 }
