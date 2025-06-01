@@ -11,7 +11,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot,addDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot,addDoc, Timestamp } from 'firebase/firestore';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -194,10 +194,10 @@ depositar(monto: number, tipo: number): Observable<void> {
       })).pipe(
         switchMap(() => {
           const transaccion = {
-            transacciones_dolar: tipo === 3 ? monto : 0,
-            transacciones_peso: tipo === 1 ? monto : 0,
-            transacciones_tipo: tipo,
-            transacciones_fecha: new Date().toISOString()
+            transaccion_dolar: tipo === 3 ? monto : 0,
+            transaccion_peso: tipo === 1 ? monto : 0,
+            transaccion_tipo: tipo,
+            transaccion_fecha: new Date()
           };
           console.log("Transacción a registrar:", transaccion);
           return from(addDoc(transaccionesRef, transaccion));
