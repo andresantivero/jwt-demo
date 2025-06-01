@@ -2,24 +2,68 @@
   <ion-toolbar color="success">
     <ion-title>
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-      DolaritoApp - retirar
+      DolaritoApp - Retiro
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="dollar-background">  
+<ion-content [fullscreen]="true" class="dollar-background">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Tu saldo actual</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Pesos: {{ saldoPesos | currency:'ARS':'symbol' }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Dólares: {{ saldoDolares | currency:'USD':'symbol' }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Retirar Fondos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Monto a retirar</ion-label>
+        <ion-input type="number" [(ngModel)]="monto"></ion-input>
+      </ion-item>
+
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Tipo de retiro</ion-label>
+          <ion-select [(ngModel)]="tipo" interface="popover">
+            <ion-select-option [value]="2">Retirar Pesos</ion-select-option>
+            <ion-select-option [value]="4">Retirar Dólares</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-item>
+        <ion-label position="floating">Alias o CBU</ion-label>
+        <ion-input type="text" [(ngModel)]="aliasOCbu"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" color="success" (click)="realizarRetiro()">
+        Realizar retiro
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
   <ion-row class="ion-justify-content-center">
-
     <ion-col size="12">
       <ion-button expand="block" color="dark" routerLink="/home" size="large">
         <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
-        Volver al menu
+        Volver al menú
       </ion-button>
     </ion-col>
   </ion-row>
 
   <!-- Fondo con patrón de dólares -->
   <div class="dollar-pattern"></div>
-
 </ion-content>
