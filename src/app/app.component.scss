@@ -1,0 +1,16 @@
+.user-info {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  background: transparent;
+  color: white;
+
+  ion-icon {
+    margin-right: 6px;
+    font-size: 22px;
+  }
+
+  ion-label {
+    font-weight: 500;
+    color: black;
+  }
+}

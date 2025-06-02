@@ -72,3 +72,13 @@
     vertical-align: middle;
     font-size: 1.4em;
   }
+
+  .clear-green-btn {
+  --color: var(--dollar-green);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.clear-green-btn ion-icon {
+  color: var(--dollar-green);
+}

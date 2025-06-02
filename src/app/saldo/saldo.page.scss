@@ -1,0 +1,80 @@
+:host {
+  --dollar-green: #009b3a;
+  --dark-accent: #1a1a1a;
+}
+
+.dollar-background {
+  --background: linear-gradient(160deg, var(--dollar-green) 0%, #00612a 100%);
+  position: relative;
+}
+
+.dollar-pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="80" font-family="Arial">$</text></svg>');
+  background-repeat: repeat;
+  z-index: 0;
+}
+
+.balance-card {
+  margin: 16px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+
+  ion-card-header {
+    background: var(--ion-color-success);
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding: 16px;
+
+    ion-card-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .user-icon {
+        font-size: 1.5em;
+        margin-right: 8px;
+      }
+    }
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 16px 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    margin: 8px 0;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    ion-label {
+      h2 {
+        font-size: 1em;
+        color: var(--ion-color-medium);
+        margin-bottom: 4px;
+      }
+
+      .balance-amount {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--ion-color-dark);
+        margin: 0;
+      }
+    }
+  }
+}

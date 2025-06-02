@@ -16,7 +16,44 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  },  
+  },   
+  {
+    path: 'cotizacion',
+    loadChildren: () => import('./cotizacion/cotizacion.module').then( m => m.CotizacionPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'saldo',
+    loadChildren: () => import('./saldo/saldo.module').then( m => m.SaldoPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'comprar',
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'historial',
+    loadChildren: () => import('./historial/historial.module').then( m => m.HistorialPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'ingresar',
+    loadChildren: () => import('./ingresar/ingresar.module').then( m => m.IngresarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'retirar',
+    loadChildren: () => import('./retirar/retirar.module').then( m => m.RetirarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'vender',
+    loadChildren: () => import('./vender/vender.module').then( m => m.VenderPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard y con su señora.
+  }
+
+
   
 ];
 

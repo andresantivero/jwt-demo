@@ -1,47 +1,116 @@
 <ion-header [translucent]="true">
-    <ion-toolbar color="success">
-        <ion-title>
-          <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+  <ion-toolbar color="success">
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="dollar-background">
+  <div class="center-content">
+    <ion-card class="auth-options dollar-card">
+      <ion-card-header>
+        <ion-card-title class="dollar-title">
+          <ion-icon name="logo-usd" class="dollar-logo"></ion-icon>
           DolaritoApp
-        </ion-title>
-      </ion-toolbar>
-  </ion-header>
-  
-  <ion-content [fullscreen]="true" class="dollar-background">
-    <div class="center-content">
-      <ion-card class="auth-options dollar-card">
-        <ion-card-header>
-            <ion-card-title class="dollar-title">
-                <ion-icon name="logo-usd" class="dollar-logo"></ion-icon>
-                DolaritoApp
-              </ion-card-title>
-              <ion-card-subtitle class="dollar-subtitle">Seguí, comprá y vendé con el valor del dólar en tiempo real</ion-card-subtitle>
-        </ion-card-header>
-  
-        <ion-card-content>
+        </ion-card-title>
+        <ion-card-subtitle class="dollar-subtitle">Seguí, comprá y vendé con el valor del dólar en tiempo real</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Login Form -->
+        <div *ngIf="currentView === 'login'">
           <ion-item>
-            <ion-label position="floating">Usuario</ion-label>
+            <ion-label position="floating">Email</ion-label>
             <ion-input type="text" [(ngModel)]="credentials.username"></ion-input>
           </ion-item>
-  
+
           <ion-item>
             <ion-label position="floating">Contraseña</ion-label>
             <ion-input type="password" [(ngModel)]="credentials.password"></ion-input>
           </ion-item>
-  
-          <ion-button expand="block" class="login-btn" (click)="login()" [disabled]="!credentials.username || !credentials.password">
+
+          <ion-button expand="block" class="login-btn" (click)="login()"
+            [disabled]="!credentials.username || !credentials.password">
             <ion-icon slot="start" name="log-in-outline"></ion-icon>
             Iniciar Sesión
           </ion-button>
-  
-          <ion-text color="danger" *ngIf="errorMessage">
-            <p>{{ errorMessage }}</p>
-          </ion-text>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  
-    <!-- Fondo con patrón de dólares -->
-    <div class="dollar-pattern"></div> 
 
-  </ion-content> 
+            <ion-button fill="clear" size="small" class="clear-green-btn" (click)="currentView = 'register'">
+              <ion-icon slot="start" name="person-add-outline"></ion-icon>
+              Registrarse
+            </ion-button>
+
+            <ion-button fill="clear" size="small" class="clear-green-btn" (click)="currentView = 'forgot'">
+              <ion-icon slot="start" name="key-outline"></ion-icon>
+              Olvidé mi contraseña
+            </ion-button>
+    
+        </div>
+
+        <!-- Registration Form -->
+        <div *ngIf="currentView === 'register'">
+          <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="registerData.name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="registerData.email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="registerData.password"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Confirmar Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="registerData.confirmPassword"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" class="login-btn" (click)="register()"
+            [disabled]="!registerData.email || !registerData.password || !registerData.name || !registerData.confirmPassword">
+            <ion-icon slot="start" name="person-add-outline"></ion-icon>
+            Registrarse
+          </ion-button>
+
+          <!-- También en los botones "volver al login" -->
+          <ion-button fill="clear" size="small" expand="block" class="clear-green-btn" (click)="currentView = 'login'; errorMessage = ''">
+            <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+            Volver al login
+          </ion-button>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div *ngIf="currentView === 'forgot'">
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="forgotData.email"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" class="login-btn" (click)="resetPassword()" [disabled]="!forgotData.email">
+            <ion-icon slot="start" name="mail-outline"></ion-icon>
+            Enviar correo de recuperación
+          </ion-button>
+
+          <!-- También en los botones "volver al login" -->
+          <ion-button fill="clear" size="small" expand="block" class="clear-green-btn" (click)="currentView = 'login'; errorMessage = ''">
+            <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+            Volver al login
+          </ion-button>
+        </div>
+
+        <ion-text color="danger" *ngIf="errorMessage">
+          <p>{{ errorMessage }}</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Fondo con patrón de dólares -->
+  <div class="dollar-pattern"></div>
+
+</ion-content>
