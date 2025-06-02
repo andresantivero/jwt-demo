@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+  namespace "com.dolarito.app" // Namespace requerido desde AGP 7+
+
+  compileSdkVersion 35 // <-- Subido de 34 a 35
+
+  defaultConfig {
+    applicationId "com.dolarito.app"
+    minSdkVersion 23
+    targetSdkVersion 35
+    versionCode 1
+    versionName "1.0"
+
+    // Necesario para algunos plugins de Capacitor (como AppAuth)
+    manifestPlaceholders = [
+      'appAuthRedirectScheme': 'com.dolarito.app'
+    ]
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  // Compatibilidad con Java 17 (corregido comentario)
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+}
+
+dependencies {
+  // Capacitor Android desde node_modules (NO por versión fija)
+  implementation project(':capacitor-android')
+
+  // AndroidX y Material Design
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'com.google.android.material:material:1.9.0'
+
+  // Asegurate de agregar esta dependencia si usás core-ktx 1.15.0
+  implementation 'androidx.core:core-ktx:1.15.0'
+}
