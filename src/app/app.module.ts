@@ -8,15 +8,21 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
+// 👇 Importa Camera de Ionic Native
+import { Camera } from '@ionic-native/camera/ngx';
+
 @NgModule({
-  declarations: [AppComponent], // 👈 sin errores porque NO es standalone
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent] // 👈 correcto
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Camera // 👈 Agrega Camera aquí
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
