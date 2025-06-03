@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
+import { BiometricGuard } from './auth/biometric.guard';
 
 const routes: Routes = [
   {
@@ -10,7 +11,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard]
   },
   {
     path: '',
@@ -20,41 +21,45 @@ const routes: Routes = [
   {
     path: 'cotizacion',
     loadChildren: () => import('./cotizacion/cotizacion.module').then( m => m.CotizacionPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard]
   },
   {
     path: 'saldo',
     loadChildren: () => import('./saldo/saldo.module').then( m => m.SaldoPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard]
   },
   {
     path: 'comprar',
     loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard, BiometricGuard] // Protegido con ambos guards
   },
   {
     path: 'historial',
     loadChildren: () => import('./historial/historial.module').then( m => m.HistorialPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard]
   },
   {
     path: 'ingresar',
     loadChildren: () => import('./ingresar/ingresar.module').then( m => m.IngresarPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard]
   },
   {
     path: 'retirar',
     loadChildren: () => import('./retirar/retirar.module').then( m => m.RetirarPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+    canActivate: [AuthGuard, BiometricGuard] // Protegido con ambos guards
   },
   {
     path: 'vender',
     loadChildren: () => import('./vender/vender.module').then( m => m.VenderPageModule),
-    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard y con su señora.
+    canActivate: [AuthGuard, BiometricGuard] // Protegido con ambos guards
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule),
+    canActivate: [AuthGuard] // Protege la página si lo deseas
+
   }
 
-
-  
 ];
 
 @NgModule({

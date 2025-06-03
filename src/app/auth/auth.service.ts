@@ -12,6 +12,7 @@ import {
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, getDocs, onSnapshot, addDoc, Timestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 // Configuración de Firebase (la tuya)
 const firebaseConfig = {
@@ -42,14 +43,14 @@ export class AuthService {
   constructor() {
     this.checkToken();
   }
+
   login(credentials: { username: string; password: string }): Observable<UserCredential | null> {
     return from(signInWithEmailAndPassword(auth, credentials.username, credentials.password)).pipe(
-      // Convertimos el token a un observable
       switchMap((userCredential) => {
         return from(userCredential.user.getIdToken()).pipe(
           map((token) => {
             this.setToken(token);
-            this.isAuthenticatedSubject.next(true); // 👈 ahora esto es sincrónico dentro del flujo
+            this.isAuthenticatedSubject.next(true);
             return userCredential;
           })
         );
@@ -120,7 +121,6 @@ export class AuthService {
     });
   }
 
-
   register(userData: { name: string; email: string; password: string }): Observable<UserCredential> {
     return from(createUserWithEmailAndPassword(auth, userData.email, userData.password)).pipe(
       switchMap((userCredential) => {
@@ -158,8 +158,6 @@ export class AuthService {
     );
   }
 
-
-
   depositar(monto: number, tipo: number): Observable<void> {
     const user = this.getCurrentUser();
     if (!user) return throwError(() => new Error('Usuario no autenticado'));
@@ -172,8 +170,6 @@ export class AuthService {
         if (!docSnap.exists()) throw new Error('Usuario no encontrado');
         const userData = docSnap.data();
 
-        console.log("Datos actuales del usuario:", userData);
-
         let nuevosPesos = userData['user_pesos'] || 0;
         let nuevosDolares = userData['user_dolares'] || 0;
 
@@ -184,8 +180,6 @@ export class AuthService {
         } else {
           throw new Error('Tipo de transacción inválido');
         }
-
-        console.log("Nuevos valores -> Pesos:", nuevosPesos, "Dólares:", nuevosDolares);
 
         return from(setDoc(userDocRef, {
           ...userData,
@@ -199,7 +193,6 @@ export class AuthService {
               transaccion_tipo: tipo,
               transaccion_fecha: new Date()
             };
-            console.log("Transacción a registrar:", transaccion);
             return from(addDoc(transaccionesRef, transaccion));
           })
         );
@@ -211,8 +204,6 @@ export class AuthService {
       })
     );
   }
-
-
 
   comprarDolares(montoPesos: number, precioDolar: number): Observable<void> {
     const dolaresAComprar = +(montoPesos / precioDolar).toFixed(2);
@@ -246,7 +237,7 @@ export class AuthService {
             const transaccion = {
               transaccion_dolar: dolaresAComprar,
               transaccion_peso: montoPesos,
-              transaccion_tipo: 5,  // Tipo 5 para compra dólares
+              transaccion_tipo: 5,
               transaccion_fecha: new Date()
             };
             return from(addDoc(transaccionesRef, transaccion));
@@ -293,7 +284,7 @@ export class AuthService {
             const transaccion = {
               transaccion_dolar: montoDolares,
               transaccion_peso: montoPesos,
-              transaccion_tipo: 6,  // Tipo 6 para venta dólares
+              transaccion_tipo: 6,
               transaccion_fecha: new Date()
             };
             return from(addDoc(transaccionesRef, transaccion));
@@ -309,61 +300,72 @@ export class AuthService {
   }
 
   retirar(monto: number, tipo: number, aliasOCbu: string): Observable<void> {
-  const user = this.getCurrentUser();
-  if (!user) return throwError(() => new Error('Usuario no autenticado'));
+    const user = this.getCurrentUser();
+    if (!user) return throwError(() => new Error('Usuario no autenticado'));
 
-  const userDocRef = doc(db, 'usuarios', user.uid);
-  const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
+    const userDocRef = doc(db, 'usuarios', user.uid);
+    const transaccionesRef = collection(db, 'usuarios', user.uid, 'Transacciones');
 
-  return from(getDoc(userDocRef)).pipe(
-    switchMap((docSnap) => {
-      if (!docSnap.exists()) throw new Error('Usuario no encontrado');
-      const userData = docSnap.data();
+    return from(getDoc(userDocRef)).pipe(
+      switchMap((docSnap) => {
+        if (!docSnap.exists()) throw new Error('Usuario no encontrado');
+        const userData = docSnap.data();
 
-      let saldoPesos = userData['user_pesos'] || 0;
-      let saldoDolares = userData['user_dolares'] || 0;
+        let saldoPesos = userData['user_pesos'] || 0;
+        let saldoDolares = userData['user_dolares'] || 0;
 
-      if (tipo === 2 && monto > saldoPesos) {
-        throw new Error('Saldo insuficiente en pesos');
-      }
+        if (tipo === 2 && monto > saldoPesos) {
+          throw new Error('Saldo insuficiente en pesos');
+        }
 
-      if (tipo === 4 && monto > saldoDolares) {
-        throw new Error('Saldo insuficiente en dólares');
-      }
+        if (tipo === 4 && monto > saldoDolares) {
+          throw new Error('Saldo insuficiente en dólares');
+        }
 
-      // Descuento del monto correspondiente
-      if (tipo === 2) {
-        saldoPesos -= monto;
-      } else if (tipo === 4) {
-        saldoDolares -= monto;
-      } else {
-        throw new Error('Tipo de transacción inválido');
-      }
+        if (tipo === 2) {
+          saldoPesos -= monto;
+        } else if (tipo === 4) {
+          saldoDolares -= monto;
+        } else {
+          throw new Error('Tipo de transacción inválido');
+        }
 
-      return from(setDoc(userDocRef, {
-        ...userData,
-        user_pesos: saldoPesos,
-        user_dolares: saldoDolares
-      })).pipe(
-        switchMap(() => {
-          const transaccion = {
-            transaccion_dolar: tipo === 4 ? -monto : 0,
-            transaccion_peso: tipo === 2 ? -monto : 0,
-            transaccion_tipo: tipo,
-            transaccion_fecha: new Date(),
-            transaccion_destino: aliasOCbu || ''
-          };
-          return from(addDoc(transaccionesRef, transaccion));
-        })
-      );
-    }),
-    map(() => { }),
-    catchError(error => {
-      console.error('❌ Error en retiro:', error);
-      return throwError(() => new Error(error.message || 'Error al procesar el retiro'));
-    })
-  );
-}
+        return from(setDoc(userDocRef, {
+          ...userData,
+          user_pesos: saldoPesos,
+          user_dolares: saldoDolares
+        })).pipe(
+          switchMap(() => {
+            const transaccion = {
+              transaccion_dolar: tipo === 4 ? -monto : 0,
+              transaccion_peso: tipo === 2 ? -monto : 0,
+              transaccion_tipo: tipo,
+              transaccion_fecha: new Date(),
+              transaccion_destino: aliasOCbu || ''
+            };
+            return from(addDoc(transaccionesRef, transaccion));
+          })
+        );
+      }),
+      map(() => { }),
+      catchError(error => {
+        console.error('❌ Error en retiro:', error);
+        return throwError(() => new Error(error.message || 'Error al procesar el retiro'));
+      })
+    );
+  }
 
+  // --- NUEVO: Guardar foto de perfil del usuario en Storage y Firestore ---
+  async actualizarFotoUsuario(base64Foto: string) {
+    const user = this.getCurrentUser();
+    if (!user) return;
 
+    const storage = getStorage();
+    const storageRef = ref(storage, `usuarios/${user.uid}/perfil.jpg`);
+    await uploadString(storageRef, base64Foto, 'data_url');
+    const url = await getDownloadURL(storageRef);
+
+    const userDocRef = doc(db, 'usuarios', user.uid);
+    await setDoc(userDocRef, { user_foto: url }, { merge: true });
+  }
 }

@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Dolarito App</ion-title>
+    <ion-title>jwt-demo</ion-title>
 
     <!-- Mostrar solo si el usuario está autenticado -->
     <ng-container *ngIf="isAuthenticated">
       <ion-buttons slot="end">
         <!-- Botón que dispara el popover -->
-        <ion-button id="user-popover-trigger">
+        <ion-button id="user-popover-trigger" routerLink="/perfil">
           <ion-icon name="person-circle-outline" slot="start"></ion-icon>
           <ion-label>Hola, {{ userName }}</ion-label>
           <ion-icon name="ellipsis-vertical-outline" slot="end"></ion-icon>

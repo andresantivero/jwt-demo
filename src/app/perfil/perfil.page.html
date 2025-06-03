@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="user">
+  <div style="text-align:center;">
+    <img [src]="user.user_foto || 'assets/default-profile.jpg'" alt="Foto de perfil"
+         width="120" height="120" style="border-radius: 50%; object-fit: cover;">
+    <br><br>
+    <ion-button expand="block" (click)="tomarFotoPerfil()">Cambiar foto de perfil</ion-button>
+    <h2>{{ user.user_name }}</h2>
+    <p>{{ user.user_mail }}</p>
+  </div>
+</ion-content>
