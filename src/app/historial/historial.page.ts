@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { TipoTransaccionNombre } from '../auth/transactions.service';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-historial',
@@ -16,7 +17,7 @@ export class HistorialPage implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.authService.getUserTransactionsRealtime((transacciones) => {
@@ -50,6 +51,11 @@ export class HistorialPage implements OnInit {
       this.currentPage--;
       this.actualizarPagina();
     }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   getTipoNombre(tipo: number): string {

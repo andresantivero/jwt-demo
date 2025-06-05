@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-retirar',
@@ -19,11 +20,17 @@ export class RetirarPage implements OnInit {
   constructor(
     private authService: AuthService,
     private loadingCtrl: LoadingController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private router: Router
   ) {}
 
   async ngOnInit() {
     this.obtenerSaldo();
+  }
+
+logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
  async obtenerSaldo() {

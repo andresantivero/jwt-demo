@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { DolarService } from '../auth/dolar.service';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comprar',
@@ -25,12 +26,18 @@ export class ComprarPage implements OnInit {
   constructor(
     private dolarService: DolarService,
     private authService: AuthService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private router: Router
   ) { }
 
   async ngOnInit() {
     await this.cargarPerfil();
     this.cargarCotizaciones();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   ionViewWillEnter() {

@@ -1,8 +1,8 @@
-<ion-header [translucent]="true">
+<ion-header  [translucent]="true">
   <ion-toolbar color="success">
     <ion-title>
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-      DolaritoApp - Historial
+      DolaritoApp - Mi Historial
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -59,13 +59,13 @@
   <!-- Paginación -->
   <ion-row class="ion-justify-content-center ion-padding-top" *ngIf="totalPages > 1">
     <ion-col size="6">
-      <ion-button expand="block" fill="outline" (click)="anteriorPagina()" [disabled]="currentPage === 1">
+      <ion-button expand="block" color="warning" (click)="anteriorPagina()" [disabled]="currentPage === 1">
         <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
         Anterior
       </ion-button>
     </ion-col>
     <ion-col size="6">
-      <ion-button expand="block" fill="outline" (click)="siguientePagina()" [disabled]="currentPage === totalPages">
+      <ion-button expand="block" color="primary" (click)="siguientePagina()" [disabled]="currentPage === totalPages">
         Siguiente
         <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
       </ion-button>

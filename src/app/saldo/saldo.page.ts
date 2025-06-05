@@ -43,6 +43,11 @@ export class SaldoPage implements OnInit {
     }
   }
 
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
   ionViewWillEnter() {
     // Actualizar los datos cada vez que se entre a la página
     this.loadUserData();

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { DolarService } from '../auth/dolar.service';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vender',
@@ -25,7 +26,8 @@ export class VenderPage implements OnInit {
   constructor(
     private dolarService: DolarService,
     private authService: AuthService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -33,6 +35,8 @@ export class VenderPage implements OnInit {
     this.cargarCotizaciones();
   }
 
+
+  
   ionViewWillEnter() {
     this.cargarPerfil();
   }
@@ -126,5 +130,10 @@ export class VenderPage implements OnInit {
       buttons: ['Aceptar']
     });
     await alert.present();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 }

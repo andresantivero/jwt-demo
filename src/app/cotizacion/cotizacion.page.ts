@@ -20,6 +20,11 @@ export class CotizacionPage implements OnInit {
     private dolarService: DolarService
   ) { }
 
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
   ngOnInit() {
     this.token = this.authService.getToken();
     this.cargarCotizaciones();
