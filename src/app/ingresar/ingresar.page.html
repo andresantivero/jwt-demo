@@ -4,27 +4,8 @@
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
       DolaritoApp - Comprar Dólares
     </ion-title>
-
-    <!-- Botón de 3 puntitos para popover -->
-    <ion-buttons slot="end">
-      <ion-button id="popover-trigger">
-        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
-<!-- Popover para cerrar sesión -->
-<ion-popover trigger="popover-trigger" triggerAction="click" dismissOnSelect="true">
-  <ng-template>
-    <ion-list>
-      <ion-item button (click)="logout()">
-        <ion-icon name="log-out-outline" slot="start"></ion-icon>
-        Cerrar sesión
-      </ion-item>
-    </ion-list>
-  </ng-template>
-</ion-popover>
 
 <ion-content [fullscreen]="true" class="dollar-background">
   <div class="dollar-pattern"></div>
