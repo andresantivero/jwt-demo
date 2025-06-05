@@ -1,29 +1,65 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="success">
-      <ion-title>
-        <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-        DolaritoApp - Menu
-      </ion-title>
-    </ion-toolbar>
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp
+    </ion-title>
+
+    <!-- Botón de 3 puntitos para popover -->
+    <ion-buttons slot="end">
+      <ion-button id="popover-trigger">
+        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="dollar-background">
+<!-- Popover para cerrar sesión -->
+<ion-popover trigger="popover-trigger" triggerAction="click" dismissOnSelect="true">
+  <ng-template>
+    <ion-list>
+      <ion-item button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Cerrar sesión
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-popover>
 
+
+<ion-content [fullscreen]="true" class="dollar-background" id="main-content">
   <ion-grid>
-  
     <ion-row class="ion-justify-content-center ion-margin-top">
 
       <ion-col size="12">
         <ion-button expand="block" color="success" routerLink="/cotizacion" size="large">
-          <ion-icon name="cash-outline" slot="start"></ion-icon>
-          Cotización
+          <ion-icon name="trending-up-outline" slot="start"></ion-icon>
+          Ver Cotización
         </ion-button>
       </ion-col>
 
       <ion-col size="12">
         <ion-button expand="block" color="secondary" routerLink="/saldo" size="large">
           <ion-icon name="wallet-outline" slot="start"></ion-icon>
-          Saldo
+          Consultar Saldo
+        </ion-button>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+
+      <ion-col size="12">
+        <ion-button expand="block" color="primary" routerLink="/ingresar" size="large">
+          <ion-icon name="arrow-down-outline" slot="start"></ion-icon>
+          Ingresar Fondos
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="warning" size="large" (click)="autenticarHuella('/retirar')">
+          <ion-icon name="arrow-up-outline" slot="start"></ion-icon>
+          Retirar Fondos
         </ion-button>
       </ion-col>
 
@@ -34,17 +70,17 @@
       <ion-col size="12">
         <ion-button expand="block" color="tertiary" size="large" (click)="autenticarHuella('/comprar')">
           <ion-icon name="cart-outline" slot="start"></ion-icon>
-          Comprar
+          Comprar Dólares
         </ion-button>
       </ion-col>
-      
+
       <ion-col size="12">
-        <ion-button expand="block" color="warning" size="large" (click)="autenticarHuella('/vender')">
-          <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
-          Vender
+        <ion-button expand="block" color="medium"  size="large" (click)="autenticarHuella('/vender')">
+          <ion-icon name="cash-outline" slot="start"></ion-icon>
+          Vender Dólares
         </ion-button>
       </ion-col>
-      
+
     </ion-row>
 
     <ion-row class="ion-justify-content-center">
@@ -52,22 +88,14 @@
       <ion-col size="12">
         <ion-button expand="block" color="dark" routerLink="/historial" size="large">
           <ion-icon name="time-outline" slot="start"></ion-icon>
-          Historial
+          Historial de Movimientos
         </ion-button>
-      </ion-col>
-
-      <ion-col size="12">
-        <ion-button expand="block" color="danger"  (click)="logout()" size="large">
-          <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-          Cerrar Sesión
-        </ion-button>
-      </ion-col>
+      </ion-col>  
 
     </ion-row>
-
   </ion-grid>
 
-   <!-- Fondo con patrón de dólares -->
-   <div class="dollar-pattern"></div> 
+  <!-- Fondo con patrón de dólares -->
+  <div class="dollar-pattern"></div> 
 
 </ion-content>

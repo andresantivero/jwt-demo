@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp - Retiro
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="dollar-background">
+  <div class="dollar-pattern"></div>
+
+  <!-- Vista normal -->
+  <ng-container *ngIf="!esperandoConfirmacion">
+
+    <ion-row class="ion-padding ion-justify-content-center">
+      <!-- Tipo -->
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Tipo de ingreso</ion-label>
+          <ion-select [(ngModel)]="tipoSeleccionado" interface="popover">
+            <ion-select-option [value]="1">Ingresar Pesos</ion-select-option>
+            <ion-select-option [value]="3">Ingresar Dólares</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <!-- Monto -->
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Monto</ion-label>
+          <ion-input type="number" [(ngModel)]="monto" placeholder="Ingrese el monto"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <!-- Botones -->
+      <ion-col size="12">
+        <ion-button expand="block" color="success" (click)="prepararDeposito()" size="large">
+          <ion-icon name="cash-outline" slot="start"></ion-icon>
+          Depositar
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="dark" routerLink="/home" size="large">
+          <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
+          Volver al menú
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ng-container>
+
+  <!-- Vista esperando confirmación -->
+  <ng-container *ngIf="esperandoConfirmacion">
+    <ion-row class="ion-padding ion-text-center ion-justify-content-center">
+      <ion-col size="12">
+        <ion-icon name="time-outline" size="large" color="warning"></ion-icon>
+        <h2>Esperando transferencia...</h2>
+        <p>Por favor, confirma cuando hayas realizado el depósito.</p>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="success" (click)="confirmarDeposito()" size="large">
+          ✅ Confirmar depósito
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button expand="block" color="danger" (click)="cancelarDeposito()" size="large">
+          ❌ Cancelar
+        </ion-button>
+      </ion-col>
+
+       <ion-col size="12">
+        <ion-button expand="block" color="dark" routerLink="/home" size="large">
+          <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
+          Volver al menú
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+</ion-content>

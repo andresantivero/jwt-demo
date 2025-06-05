@@ -35,7 +35,22 @@ const routes: Routes = [
     path: 'vender',
     loadChildren: () => import('./vender/vender.module').then( m => m.VenderPageModule),
     canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'historial',
+    loadChildren: () => import('./historial/historial.module').then( m => m.HistorialPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },
+  {
+    path: 'retirar',
+    loadChildren: () => import('./retirar/retirar.module').then( m => m.RetirarPageModule),
+    canActivate: [AuthGuard] // 👉 ACA protegemos la ruta con AuthGuard
+  },  {
+    path: 'ingresar',
+    loadChildren: () => import('./ingresar/ingresar.module').then( m => m.IngresarPageModule)
   }
+
+
 
 
 

@@ -2,19 +2,55 @@
   <ion-toolbar color="success">
     <ion-title>
       <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
-      DolaritoApp - Vender
+      DolaritoApp - Vender Dólares
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="dollar-background">  
+<ion-content [fullscreen]="true" class="dollar-background">
+
+  <ion-row class="ion-justify-content-center ion-padding">
+    <ion-col size="12" size-md="6">
+
+      <ion-card *ngIf="!loading; else cargando">
+        <ion-card-header>
+          <ion-card-title>Precio dólar más caro</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>{{ precioVenta | currency:'ARS':'symbol':'1.2-2' }}</h2>
+          <p>Saldo disponible en dólares: {{ userDolares }}</p>
+
+          <ion-item>
+            <ion-label position="floating">Cantidad de dólares a vender</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="dolaresAVender"
+              (ionChange)="validarVenta()"
+              min="0"
+              [max]="maxDolares"
+              step="0.01"
+            ></ion-input>
+          </ion-item>
+
+          <p>Dólares máximos que puedes vender: {{ maxDolares }}</p>
+
+          <ion-text color="danger" *ngIf="errorMessage">{{ errorMessage }}</ion-text>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button expand="block" color="success" (click)="vender()" [disabled]="botonDisabled" size="large">
+        <ion-icon name="cash-outline" slot="start"></ion-icon>
+        Vender dólares
+      </ion-button>
+
+    </ion-col>
+  </ion-row>
 
   <ion-row class="ion-justify-content-center">
-
     <ion-col size="12">
       <ion-button expand="block" color="dark" routerLink="/home" size="large">
         <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
-        Volver al menu
+        Volver al menú
       </ion-button>
     </ion-col>
   </ion-row>
@@ -24,3 +60,7 @@
 
 </ion-content>
 
+<ng-template #cargando>
+  <ion-spinner name="crescent"></ion-spinner>
+  <p>Cargando...</p>
+</ng-template>

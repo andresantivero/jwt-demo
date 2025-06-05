@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-title>
+      <ion-icon name="cash-outline" class="dollar-icon"></ion-icon>
+      DolaritoApp - Historial
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dollar-background ion-padding">
+
+  <ion-row class="ion-justify-content-center ion-padding-top">
+    <ion-col size="12">
+      <ion-button expand="block" color="dark" routerLink="/home" size="large">
+        <ion-icon name="return-down-back-outline" slot="start"></ion-icon>
+        Volver al menu
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-list *ngIf="transaccionesPaginadas.length > 0; else sinTransacciones">
+    <ion-item *ngFor="let transaccion of transaccionesPaginadas">
+      <ion-label>
+        <h2>{{ getTipoNombre(transaccion.transaccion_tipo) }}</h2>
+        <p *ngIf="transaccion.transaccion_tipo <= 2">
+          Monto: $ {{ transaccion.transaccion_peso | number:'1.2-2' }} 
+        </p>
+        <p *ngIf="transaccion.transaccion_tipo >= 3 && transaccion.transaccion_tipo <= 4">
+          Monto: USD {{ transaccion.transaccion_dolar | number:'1.2-2' }}
+        </p>
+        <p *ngIf="transaccion.transaccion_tipo === 5">
+          Pesos: - ${{ transaccion.transaccion_peso | number:'1.2-2'}} |
+          Dólares: + USD {{ transaccion.transaccion_dolar | number:'1.2-2'}} |
+          Cotización: ${{ (transaccion.transaccion_peso / transaccion.transaccion_dolar) | number:'1.2-2' }}
+        </p>
+        <p *ngIf="transaccion.transaccion_tipo === 6">
+          Dólares: - USD {{ transaccion.transaccion_dolar | number:'1.2-2'}} |
+          CPesos: + ${{ transaccion.transaccion_peso | number:'1.2-2'}} |
+          Cotización: ${{ (transaccion.transaccion_peso / transaccion.transaccion_dolar) | number:'1.2-2' }}
+        </p>
+        <p>Fecha: {{ transaccion.transaccion_fecha.toDate() | date:'short' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #sinTransacciones>
+    <ion-card class="balance-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">
+          🕓 Historial de Transacciones
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-text-center">
+        No hay transacciones registradas.
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <!-- Paginación -->
+  <ion-row class="ion-justify-content-center ion-padding-top" *ngIf="totalPages > 1">
+    <ion-col size="6">
+      <ion-button expand="block" fill="outline" (click)="anteriorPagina()" [disabled]="currentPage === 1">
+        <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+        Anterior
+      </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button expand="block" fill="outline" (click)="siguientePagina()" [disabled]="currentPage === totalPages">
+        Siguiente
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-justify-content-center">
+    <ion-col size="12" class="ion-text-center">
+      Página {{ currentPage }} de {{ totalPages }}
+    </ion-col>
+  </ion-row>
+
+  <div class="dollar-pattern"></div>
+
+</ion-content>
